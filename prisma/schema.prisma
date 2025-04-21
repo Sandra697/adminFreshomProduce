@@ -1,0 +1,160 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Product model
+model Product {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  price       Float
+  image       String?
+  category    String
+  featured    Boolean   @default(false)
+  inStock     Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  orderItems  OrderItem[]
+  tallyItems  TallyItem[]
+}
+
+// User model for customers
+model User {
+  id          Int       @id @default(autoincrement())
+  name        String
+  email       String    @unique
+  phone       String?
+  address     String?
+  password    String?   // Hashed password
+  role        UserRole  @default(CUSTOMER)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  orders      Order[]
+  supportTickets SupportTicket[]
+}
+
+// Admin user model
+model AdminUser {
+  id          Int       @id @default(autoincrement())
+  name        String
+  email       String    @unique
+  password    String    // Hashed password
+  role        AdminRole
+  lastActive  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// Order model
+model Order {
+  id              Int         @id @default(autoincrement())
+  orderNumber     String      @unique
+  userId          Int
+  user            User        @relation(fields: [userId], references: [id])
+  total           Float
+  deliveryOption  String    // "Door to Door" or "Pick Up"
+  paymentMethod   String    // "Mobile Money" or "Cash"
+ paymentStatus    PaymentStatus @default(PENDING)  // Using the enum instead of String
+  orderStatus     OrderStatus @default(PENDING)  // Using the enum instead of String
+  location        String?   // Customer location for delivery
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  orderItems      OrderItem[]
+}
+
+
+// Order Item model
+model OrderItem {
+  id          Int       @id @default(autoincrement())
+  orderId     Int
+  order       Order     @relation(fields: [orderId], references: [id])
+  productId   Int
+  product     Product   @relation(fields: [productId], references: [id])
+  quantity    Int
+  price       Float
+}
+
+// Support Ticket model
+model SupportTicket {
+  id          Int                  @id @default(autoincrement())
+  userId      Int
+  user        User                @relation(fields: [userId], references: [id])
+  message     String
+  status      SupportTicketStatus @default(NEW)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  responses   SupportResponse[]
+}
+
+
+// Support Response model
+model SupportResponse {
+  id              Int           @id @default(autoincrement())
+  supportTicketId Int
+  supportTicket   SupportTicket @relation(fields: [supportTicketId], references: [id])
+  message         String
+  respondedBy     String        // Admin name or system
+  createdAt       DateTime      @default(now())
+}
+
+// Daily Tally model
+model TallyEntry {
+  id          Int       @id @default(autoincrement())
+  date        DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  tallyItems  TallyItem[]
+}
+
+// Tally Item model
+model TallyItem {
+  id            Int         @id @default(autoincrement())
+  tallyEntryId  Int
+  tallyEntry    TallyEntry  @relation(fields: [tallyEntryId], references: [id])
+  productId     Int
+  product       Product     @relation(fields: [productId], references: [id])
+  quantity      Int
+  notes         String?
+}
+
+// Enums
+enum UserRole {
+  ADMIN
+  CUSTOMER
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  DELIVERY
+  SUPPORT
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PAID
+  PENDING
+}
+
+enum SupportTicketStatus {
+  NEW
+  OPEN
+  PROCESSING
+  CLOSED
+  ARCHIVED
+}
