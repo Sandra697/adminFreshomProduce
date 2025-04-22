@@ -84,7 +84,7 @@ export default function DashboardPage() {
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="products">Products</TabsTrigger>
-          <TabsTrigger value="orders">Orders</TabsTrigger>
+{/*           <TabsTrigger value="orders">Orders</TabsTrigger> */}
           <TabsTrigger value="members">Members</TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
