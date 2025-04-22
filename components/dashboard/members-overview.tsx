@@ -246,10 +246,10 @@ export function MembersOverview() {
                     <TableCell>{formatDate(member.createdAt)}</TableCell>
                     <TableCell>{member._count.orders}</TableCell>
                     <TableCell className="text-right">
-                      <Button className="bg-gray-400" variant="ghost" size="sm">
+                      <Button className="bg-gray-400 mr-1" variant="ghost" size="sm">
                         View
                       </Button>
-                      <Button className="bg-gray-400" variant="ghost" size="sm">
+                      <Button className="bg-gray-400 ml-1" variant="ghost" size="sm">
                         Edit
                       </Button>
                     </TableCell>
