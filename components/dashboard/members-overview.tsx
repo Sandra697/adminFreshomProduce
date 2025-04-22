@@ -151,7 +151,7 @@ export function MembersOverview() {
                 Add Member
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent  className="bg-white">
               <DialogHeader>
                 <DialogTitle>Add New Member</DialogTitle>
                 <DialogDescription>Add a new customer to your system.</DialogDescription>
@@ -246,10 +246,10 @@ export function MembersOverview() {
                     <TableCell>{formatDate(member.createdAt)}</TableCell>
                     <TableCell>{member._count.orders}</TableCell>
                     <TableCell className="text-right">
-                      <Button variant="ghost" size="sm">
+                      <Button className="bg-gray-400" variant="ghost" size="sm">
                         View
                       </Button>
-                      <Button variant="ghost" size="sm">
+                      <Button className="bg-gray-400" variant="ghost" size="sm">
                         Edit
                       </Button>
                     </TableCell>
