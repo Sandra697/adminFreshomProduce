@@ -219,7 +219,7 @@ export function MembersOverview() {
         ) : (
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="bg-gray-100 text-[0.75rem]">
                 <TableHead>Name</TableHead>
                 <TableHead>Email</TableHead>
                 <TableHead>Phone Number</TableHead>
@@ -239,7 +239,7 @@ export function MembersOverview() {
                 </TableRow>
               ) : (
                 filteredMembers.map((member) => (
-                  <TableRow key={member.id}>
+                  <TableRow key={member.id}  className="text-[0.75rem]">
                     <TableCell className="font-medium">{member.name}</TableCell>
                     <TableCell>{member.email}</TableCell>
                     <TableCell>{member.phone || "—"}</TableCell>
